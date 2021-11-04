@@ -3,4 +3,4 @@ theDollarRises
 
 pixi.js based Browser Game
 
-[Demo](https://mustafacanpalaz.com/theDollarRises)
+[Demo](https://thedollarrises.netlify.app)
