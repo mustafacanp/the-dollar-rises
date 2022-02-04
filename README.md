@@ -1,5 +1,4 @@
-theDollarRises
-------
+# theDollarRises
 
 pixi.js based Browser Game
 

@@ -7,22 +7,20 @@ app.renderer.autoResize = true;
 app.renderer.backgroundColor = 0x061639;
 document.body.appendChild(app.view);
 
+function gameLoop(delta, rte, money, countingText) {
+  // Collision with money
+  if (collisionDetection(rte, money)) {
+    SCORE++;
 
-function gameLoop(delta, rte, money, countingText){
+    DOLLAR -= decreaseDollar();
+    updateCountingText(countingText);
+    changeMoneyPosition(money);
 
-  // Paraya Çarptığında
-  if(collisionDetection(rte, money)){
-      SCORE++;
-
-      DOLLAR -= decreaseDollar();
-      updateCountingText(countingText);
-      changeMoneyPosition(money);
-
-      if(controlGameOver()) {
-        gameOver();
-      }
+    if (controlGameOver()) {
+      gameOver();
+    }
   }
-  if(!controlGameOver()) {
+  if (!controlGameOver()) {
     arrowKeys(rte);
   }
 }
