@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import { RESOURCES } from "./src/constants";
 import Rte from "./src/objects/Rte";
 import Money from "./src/objects/Money";
-import keyEvents from "./src/geometry/keyEvents";
+import controlEvents from "./src/geometry/keyEvents";
 import collisionDetection from "./src/geometry/collisionDetection";
 import { checkGameOver, gameOver } from "./src/utils/gameOver";
 import CurrencyText from "./src/ui/CurrencyText";
@@ -55,7 +55,7 @@ const setup = () => {
         }
       }
       if (!checkGameOver(currencyText, monthText)) {
-        keyEvents(rte);
+        controlEvents(rte);
       }
     }
     gameLoop(delta, rte, money, currencyText, monthText, electionText);
@@ -65,7 +65,7 @@ const setup = () => {
 };
 
 const loadProgressHandler = (loader, resource) => {
-  // Some fancy RTE animation will come here
+  // A fancy RTE animation will come here
   // console.log("loading: " + resource.url);
   // console.log("progress: " + loader.progress + "%");
 };

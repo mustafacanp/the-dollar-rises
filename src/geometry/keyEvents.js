@@ -1,6 +1,6 @@
 import collisionDetection from "./collisionDetection";
 
-function keyboard(keyCodes) {
+function keyboardInput(keyCodes) {
   const key = {};
   key.codes = keyCodes;
   key.isDown = false;
@@ -33,12 +33,12 @@ function keyboard(keyCodes) {
 }
 
 // ↑, ←, ↓, →, W, A, S, D
-const goLeft = keyboard([37, 65]);
-const goUp = keyboard([38, 87]);
-const goRight = keyboard([39, 68]);
-const goDown = keyboard([40, 83]);
+const goLeft = keyboardInput([37, 65]);
+const goUp = keyboardInput([38, 87]);
+const goRight = keyboardInput([39, 68]);
+const goDown = keyboardInput([40, 83]);
 
-const keyEvents = (rte) => {
+const keyboardEvents = (rte) => {
   const app = rte.getApp();
   const speed = rte.getSpeed();
   if (collisionDetection(rte, app.screen, true)) {
@@ -46,6 +46,7 @@ const keyEvents = (rte) => {
     rte.y += rte.vy;
   }
   goLeft.press = () => {
+    controllerEnabled = false;
     rte.vx -= speed;
   };
   goLeft.release = () => {
@@ -56,6 +57,7 @@ const keyEvents = (rte) => {
     }
   };
   goUp.press = () => {
+    controllerEnabled = false;
     rte.vy -= speed;
   };
   goUp.release = () => {
@@ -66,6 +68,7 @@ const keyEvents = (rte) => {
     }
   };
   goRight.press = () => {
+    controllerEnabled = false;
     rte.vx += speed;
   };
   goRight.release = () => {
@@ -76,6 +79,7 @@ const keyEvents = (rte) => {
     }
   };
   goDown.press = () => {
+    controllerEnabled = false;
     rte.vy += speed;
   };
   goDown.release = () => {
@@ -87,4 +91,60 @@ const keyEvents = (rte) => {
   };
 };
 
-export default keyEvents;
+let controllerEnabled = false;
+let controllerIndex = null;
+let gamepadLeftPressed = false;
+let gamepadRightPressed = false;
+let gamepadUpPressed = false;
+let gamepadDownPressed = false;
+
+const gamepadEvents = (rte) => {
+  if (controllerIndex !== null) {
+    const gamepad = navigator.getGamepads()[controllerIndex];
+
+    const buttons = gamepad.buttons;
+    gamepadUpPressed = buttons[12].pressed;
+    gamepadDownPressed = buttons[13].pressed;
+    gamepadLeftPressed = buttons[14].pressed;
+    gamepadRightPressed = buttons[15].pressed;
+
+    const stickDeadZone = 0.4;
+    const leftRightValue = gamepad.axes[0];
+    const upDownValue = gamepad.axes[1];
+
+    if (leftRightValue >= stickDeadZone) gamepadRightPressed = true;
+    else if (leftRightValue <= -stickDeadZone) gamepadLeftPressed = true;
+
+    if (upDownValue >= stickDeadZone) gamepadDownPressed = true;
+    else if (upDownValue <= -stickDeadZone) gamepadUpPressed = true;
+
+    const speed = rte.getSpeed();
+    if (gamepadUpPressed) {
+      rte.vy -= speed / 35;
+      controllerEnabled = true;
+    } else if (gamepadDownPressed) {
+      rte.vy += speed / 35;
+      controllerEnabled = true;
+    } else if (controllerEnabled) rte.vy = 0;
+
+    if (gamepadLeftPressed) rte.vx -= speed / 35;
+    else if (gamepadRightPressed) rte.vx += speed / 35;
+    else if (controllerEnabled) rte.vx = 0;
+  }
+
+  window.addEventListener("gamepadconnected", (event) => {
+    controllerEnabled = true;
+    controllerIndex = event.gamepad.index;
+  });
+  window.addEventListener("gamepaddisconnected", (event) => {
+    controllerEnabled = false;
+    controllerIndex = null;
+  });
+};
+
+const controlEvents = (rte) => {
+  gamepadEvents(rte);
+  keyboardEvents(rte);
+};
+
+export default controlEvents;
