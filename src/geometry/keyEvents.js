@@ -33,10 +33,10 @@ function keyboardInput(keyCodes) {
 }
 
 // ↑, ←, ↓, →, W, A, S, D
-const goLeft = keyboardInput([37, 65]);
-const goUp = keyboardInput([38, 87]);
-const goRight = keyboardInput([39, 68]);
-const goDown = keyboardInput([40, 83]);
+const keyboardLeft = keyboardInput([37, 65]);
+const keyboardUp = keyboardInput([38, 87]);
+const keyboardRight = keyboardInput([39, 68]);
+const keyboardDown = keyboardInput([40, 83]);
 
 const keyboardEvents = (rte) => {
   const app = rte.getApp();
@@ -45,45 +45,45 @@ const keyboardEvents = (rte) => {
     rte.x += rte.vx;
     rte.y += rte.vy;
   }
-  goLeft.press = () => {
+  keyboardLeft.press = () => {
     controllerEnabled = false;
     rte.vx -= speed;
   };
-  goLeft.release = () => {
-    if (!goRight.isDown) {
+  keyboardLeft.release = () => {
+    if (!keyboardRight.isDown) {
       rte.vx = 0;
     } else {
       rte.vx += speed;
     }
   };
-  goUp.press = () => {
+  keyboardUp.press = () => {
     controllerEnabled = false;
     rte.vy -= speed;
   };
-  goUp.release = () => {
-    if (!goDown.isDown) {
+  keyboardUp.release = () => {
+    if (!keyboardDown.isDown) {
       rte.vy = 0;
     } else {
       rte.vy += speed;
     }
   };
-  goRight.press = () => {
+  keyboardRight.press = () => {
     controllerEnabled = false;
     rte.vx += speed;
   };
-  goRight.release = () => {
-    if (!goLeft.isDown) {
+  keyboardRight.release = () => {
+    if (!keyboardLeft.isDown) {
       rte.vx = 0;
     } else {
       rte.vx -= speed;
     }
   };
-  goDown.press = () => {
+  keyboardDown.press = () => {
     controllerEnabled = false;
     rte.vy += speed;
   };
-  goDown.release = () => {
-    if (!goUp.isDown) {
+  keyboardDown.release = () => {
+    if (keyboardUp.isDown) {
       rte.vy = 0;
     } else {
       rte.vy -= speed;
